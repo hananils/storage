@@ -85,6 +85,7 @@
             $result = new XMLElement($this->ROOTELEMENT);
             $result->setAttribute('type', $action);
 
+            $errors = $storage->getErrors();
             if(!empty($errors)) {
                 $result->setAttribute('result', 'error');
                 foreach($errors as $error) {
