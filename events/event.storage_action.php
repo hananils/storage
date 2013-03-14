@@ -63,7 +63,9 @@
         }
 
         protected function __trigger() {
-            $action = key($_REQUEST['storage-action']);
+            $action_keys = array_keys($_REQUEST['storage-action']);
+            $action = end($action_keys);
+
             $items = (array)$_REQUEST['storage'];
             array_walk_recursive($items, 'General::sanitize');
 
