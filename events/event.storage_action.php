@@ -1,6 +1,5 @@
 <?php
 
-    require_once(TOOLKIT . '/class.event.php');
     require_once(EXTENSIONS . '/storage/lib/class.storage.php');
 
     Class eventstorage_action extends Event {
