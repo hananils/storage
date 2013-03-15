@@ -1,6 +1,5 @@
 <?php
 
-    require_once(TOOLKIT . '/class.event.php');
     require_once(EXTENSIONS . '/storage/lib/class.storage.php');
 
     Class eventstorage_action extends Event {
@@ -84,33 +83,25 @@
                     break;
             }
 
-            // Execute event
-            return $this->execute($action, $items, $storage->getErrors());
-        }
-
-        public function execute($action, $items, $errors) {
+            // Build XML
             $result = new XMLElement($this->ROOTELEMENT);
             $result->setAttribute('type', $action);
 
-            // Error
+            $errors = $storage->getErrors();
             if(!empty($errors)) {
                 $result->setAttribute('result', 'error');
                 foreach($errors as $error) {
                     $result->appendChild(new XMLElement('message', $error));
                 }
             }
-
-            // Success
             else {
                 $result->setAttribute('result', 'success');
             }
 
-            // Return request
             $request = new XMLElement('request-values');
             $result->appendChild($request);
             Storage::buildXML($request, $items, true);
 
-            // Return result
             return $result;
         }
 
