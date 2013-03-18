@@ -39,7 +39,9 @@
     &lt;storage-action type=&quot;set-count&quot; result=&quot;success&quot;&gt;
         &lt;request-values&gt;
             &lt;group id=&quot;basket&quot;&gt;
-                &lt;item id=&quot;article1&quot; difference=&quot;+3&quot; /&gt;
+                &lt;item id=&quot;article1&quot;&gt;
+                    &lt;item id=&quot;count-postive&quot;&gt;3&lt;/item&gt;
+                &lt;/item&gt;
             &lt;/group&gt;
         &lt;/request-values&gt;
     &lt;/storage-action&gt;
@@ -51,7 +53,9 @@
         &lt;message&gt;Invalid count: 3.5 is not an integer, ignoring value.&lt;/message&gt;
         &lt;request-values&gt;
             &lt;group id=&quot;basket&quot;&gt;
-                &lt;item id=&quot;article1&quot; difference=&quot;+3.5&quot; /&gt;
+                &lt;item id=&quot;article1&quot;&gt;
+                    &lt;item id=&quot;count-postive&quot;&gt;3.5&lt;/item&gt;
+                &lt;/item&gt;
             &lt;/group&gt;
         &lt;/request-values&gt;
     &lt;/storage-action&gt;
@@ -67,25 +71,27 @@
             $action = end($action_keys);
 
             $items = (array)$_REQUEST['storage'];
-            array_walk_recursive($items, 'General::sanitize');
 
-            $storage = new Storage();
+            $s = new Storage();
 
             // Trigger action
             switch($action) {
                 case 'set':
-                    $storage->set($items);
+                    $s->set($items);
                     break;
                 case 'set-count':
-                    $storage->setCount($items);
+                    $s->setCount($items);
                     break;
                 case 'drop':
-                    $storage->drop($items);
+                    $s->drop($items);
+                    break;
+                case 'drop-all':
+                    $s->dropAll();
                     break;
             }
 
             // Execute event
-            return $this->execute($action, $items, $storage->getErrors());
+            return $this->execute($action, $items, $s->getErrors());
         }
 
         public function execute($action, $items, $errors) {
@@ -108,7 +114,7 @@
             // Return request
             $request = new XMLElement('request-values');
             $result->appendChild($request);
-            Storage::buildXML($request, $items, true);
+            Storage::buildXML($request, $items, false);
 
             // Return result
             return $result;

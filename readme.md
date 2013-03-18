@@ -13,11 +13,12 @@ If an item uses `count` and `count-positive` keys, `count` will take precedence 
 
 ## Events
 
-Storage is a standalone class (`/lib/class.storage.php`) that can be used to create custom events. But the extension bundles a default event that should be sufficient for most cases. It offers three actions:
+Storage is a standalone class (`/lib/class.storage.php`) that can be used to create custom events. But the extension bundles a default event that should be sufficient for most cases. It offers four actions:
 
 - **set:** to set new groups and items, replacing existing values
 - **set-count:** to set new groups and items, replacing existing values and recalculating counts
 - **drop:** to drop entire groups or single items from the storage
+- **drop-all:** to drop the storage completely
 
 These actions can be triggered by either sending a `POST` or `GET` request. This example form will update a shopping basket by raising the amount of `article1` by 3.
 
@@ -35,7 +36,9 @@ These actions can be triggered by either sending a `POST` or `GET` request. This
     <storage-action type="set-count" result="success">
         <request-values>
             <group id="basket">
-                <item id="article1" difference="+3" />
+                <item id="article1">
+                    <item id="count-postive">3</item>
+                </item>
             </group>
         </request-values>
     </storage-action>
@@ -51,7 +54,9 @@ These actions can be triggered by either sending a `POST` or `GET` request. This
     	<message>Invalid count: 3.5 is not an integer, ignoring value.</message>
         <request-values>
             <group id="basket">
-                <item id="article1" difference="+3.5" />
+                <item id="article1">
+                    <item id="count-postive">3.5</item>
+                </item>
             </group>
         </request-values>
     </storage-action>
